@@ -1,0 +1,53 @@
+# paths to training and validation sets
+datasets:
+  #train_path: ./data/Palmyrene_train
+  #val_path: ./data/Palmyrene_valid
+  #train_path: ./data/train_DIV2K_1000  # 800 images
+  #val_path: ./data/val_DIV2K_1000  # 100 images
+  #train_path: ./data/train_BSDS300  # 250 images
+  #val_path: ./data/val_BSDS300  # 50 images
+  train_path: ./data/General100_train #92 images
+  val_path: ./data/General100_valid #8 images
+  #train_path: ./data/Lungs_SR_train #too large, causes crash
+  #val_path: ./data/Lungs_SR_valid #too large, causes crash
+  batch_size: 1  # Batch size for training - keep 1 if images are of different sizes
+
+# model type and hyperparameters
+# original IRN had 500 000 iterations - 625 epochs for 800 images
+train:
+  model_type: 'SR' # 'IRN' or 'SR'
+  lr: 0.0005  # Learning rate for optimizer
+  epochs: 50  # Number of training epochs
+  save_model_freq: 1  # Save the model after every 1 epochs
+  checkpoint_dir: ./checkpoints/Experiments/E12-General100-SR_nSSIM  # Directory to save checkpoints
+  
+  # Fill with path to downscaler and upscaler checkpoint if resuming (or only upscaler for SR - downscaler is not trainable)
+  # Keep empty if starting from scratch
+  checkpoint_continue:
+    #downscaler: ./checkpoints/General100/Experiment_finetuning_network/downscaler_epoch_60.ckpt
+    #upscaler: ./checkpoints/General100/SR/General100_SR_ySSIM_transfer_learning/upscaler_epoch_30.ckpt
+    downscaler: 
+    upscaler: 
+
+# loss function balancing
+loss_weights:
+  alpha: 1.0  # MSE weight (backward cycle MSE - original vs. reconstructed)
+  beta: 1.0   # VGG Perceptual loss weight
+  gamma: 1.0  # Forward cycle MSE consistency weight (downscaled from original vs. downscaled from reconstructed)
+  lambda_ssim: 0.0  # SSIM loss weight
+
+# VGG Feature layers for perceptual loss
+# Guide for layer selection:
+# Block 1 - low-level features like edges and textures. - block1_conv1, block1_conv2
+# Block 2 - higher-level features, such as simple textures and shapes. - block2_conv1, block2_conv2
+# Block 3 - more complex textures and patterns - block3_conv1, block3_conv2, block3_conv3, block3_conv4
+# Block 4 - higher-level features like parts of objects - block4_conv1, block4_conv2, block4_conv3, block4_conv4
+# Block 5 - high-level, abstract features - block5_conv1, block5_conv2, block5_conv3, block5_conv4
+vgg_feature_layers:
+  feature_layer1: 'block4_conv4'
+  feature_layer2: 'block5_conv4'
+# best setting is 'block4_conv4' and 'block5_conv4'
+
+# Number of downscale steps - 1 means 200x200 to 100x100, 2 means 200x200 to 50x50 etc.
+model:
+  num_downscale_steps: 1  # Number of downscale steps (2x for each step)

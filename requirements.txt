@@ -1,0 +1,6 @@
+tensorflow-gpu==1.15.0
+Pillow==8.4.0
+numpy==1.19.5
+pyyaml==6.0
+scikit-image==0.17.2
+scipy==1.5.4

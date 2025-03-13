@@ -1,0 +1,8 @@
+#### Inference Configuration
+
+image: ./Barbie-E03.png  # Path to the input image
+model_mod: 'SR' # 'SR' or 'IRN'
+model_type: upscaler  # Choose between 'downscaler', 'upscaler' or 'both'
+checkpoint: ./checkpoints/Experiments/E03-BSDS300-SR_ySSIM/upscaler_epoch_30.ckpt  # Path to the model checkpoint
+num_downscale_steps: 1  # Number of downscaling steps used during training
+evaluate: true  # Whether to evaluate the similarity (PSNR and SSIM)
