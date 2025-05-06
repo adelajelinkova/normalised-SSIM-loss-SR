@@ -10,8 +10,8 @@ to train:
 2) python Train_final_combined.py 
 
 to infer (not yet implemented):
-1) edit infer_config.yml
-2) python Infer_final_combined.py
+1) edit infer_config.yml - image or folder
+2) python Infer_final_combined.py for 1 image or Infer_batch_combined.py for folder inference (automatically measures PSNR and SSIM metrics and saves as csv)
 
 cls to clear screen
 
